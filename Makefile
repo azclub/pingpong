@@ -1,2 +1,2 @@
-deploy
-ansible-playbook -i hosts ansible/site.yml
+deploy:
+	ansible-playbook -i ansible/hosts ansible/site.yml

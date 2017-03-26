@@ -1,23 +1,35 @@
 - name: Setup
   hosts: home
   tasks:
+    - name: apt packages
+      apt:
+        name: "{{ item }}"
+        update_cache: yes
+      with_items:
+        - libatlas-base-dev
+        - gfortran
+        - python-dev
+      sudo: yes
+
     - name: install pip packages
       pip: name={{ item }}
       with_items:
         - virtualenv
+
+    - name: cleanup
+      file: path={{ project_dir }} state=absent
 
     - name: git clone
       git:
         repo: git@github.com:azclub/pingpong.git
         dest: "{{ project_dir }}"
         clone: yes
-        force: yes
         version: phase1
 
     - name: setup
       pip:
         requirements: "{{ project_dir }}/requirements.txt"
-        virtualenv: "{{ project_dir }}/venv"
+        virtualenv: "{{ venv_dir }}"
 
     # - name: run python command
-    # - command: source {{ project_dir }}/venv/bin/activate
+    # - command: source {{ venv_dir }}/bin/activate
