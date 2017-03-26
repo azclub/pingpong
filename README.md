@@ -1,6 +1,7 @@
 # Ping Pong Scoring Tracker
 Keep track of ping pong scoring. Cause I can't remember the scoring when I am in the game and I got a lot of free time to kill.
 
+
 ## Phase 1
 Record and stream Video
 

@@ -1,0 +1,5 @@
+---
+ansible_connection: ssh
+ansible_ssh_user: pi
+project_dir: /home/pi/projects/pingpong
+virtualenv_dir: /home/pi/virtualenv/pingpong
