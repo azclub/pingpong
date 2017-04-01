@@ -1,35 +1,111 @@
 - name: Setup
   hosts: home
   tasks:
-    - name: apt packages
+    - name: install opencv
       apt:
         name: "{{ item }}"
         update_cache: yes
+      sudo: yes
       with_items:
         - libatlas-base-dev
         - gfortran
         - python-dev
-      sudo: yes
+        - python2.7-dev
+
+        - build-essential
+        - cmake
+        - pkg-config
+        - libjpeg-dev
+        - libtiff5-dev
+        - libjasper-dev
+        - libpng12-dev
+
+        - libgtk2.0-dev
+        - libgstreamer0.10-0-dbg
+        - libgstreamer0.10-0
+        - libgstreamer0.10-dev
+        - libv4l-0
+        - libv4l-dev
+
+        - libavcodec-dev
+        - libavformat-dev
+        - libswscale-dev
+        - libv4l-dev
+
+        - libxvidcore-dev
+        - libx264-dev
+
+        - libatlas-base-dev
+        - gfortran
+
+        - python-numpy
+        - python-scipy
+        - python-matplotlib
+
+        - default-jdk
+        - ant
+
+        - libgtkglext1-dev
+
+        - v4l-utils
+
+      tags:
+        - opencv
+
+    - name: install opencv dependency via pip
+      pip: name={{ item }}
+      with_items:
+        - numpy
+      tags:
+        - opencv
+
+    - name: download opencv
+      unarchive:
+        src: "{{ opencv.url }}"
+        dest: "{{ opencv.dir }}"
+        remote_src: yes
+        copy: no
+      tags:
+        - opencv
+
 
     - name: install pip packages
       pip: name={{ item }}
       with_items:
         - virtualenv
+      tags: init
 
     - name: cleanup
       file: path={{ project_dir }} state=absent
+      tags:
+        - reset
 
     - name: git clone
       git:
         repo: git@github.com:azclub/pingpong.git
         dest: "{{ project_dir }}"
         clone: yes
-        version: phase1
+        version: "{{ git_branch }}"
+
+      tags:
+        - init
+
+    - name: git checkout
+      git:
+        repo: git@github.com:azclub/pingpong.git
+        dest: "{{ project_dir }}"
+        version: "{{ git_branch }}"
+        update: yes
+        force: yes
+      tags:
+        - deploy
 
     - name: setup
       pip:
         requirements: "{{ project_dir }}/requirements.txt"
         virtualenv: "{{ venv_dir }}"
+
+      tags: script
 
     # - name: run python command
     # - command: source {{ venv_dir }}/bin/activate

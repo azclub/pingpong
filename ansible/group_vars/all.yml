@@ -3,3 +3,7 @@ ansible_connection: ssh
 ansible_ssh_user: pi
 project_dir: /home/pi/projects/pingpong
 venv_dir: /home/pi/venv/pingpong
+git_branch: master
+opencv:
+  dir: /home/pi/opencv
+  url: https://github.com/opencv/opencv/archive/3.2.0.tar.gz
